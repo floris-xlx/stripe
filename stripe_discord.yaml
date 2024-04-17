@@ -1,0 +1,5 @@
+db:
+  // Database provider to pick from
+  // Supported providers: supabase, sled
+  // Default: supabase
+  DbProvider: supabase
