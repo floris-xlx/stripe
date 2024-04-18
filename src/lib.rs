@@ -159,8 +159,13 @@ use serde_derive::{
 };
 
 
+/// ## Configuration #[derive(Debug)]
+/// This will set the config for the `email` and for the `databasing` solutions
+///
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub db_provider: String,
     pub email_provider: String,
+    pub sender_email: String
+
 }

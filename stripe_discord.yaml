@@ -1,14 +1,7 @@
-db:
-  // Database provider to pick from
-  // Supported providers: supabase, sled
-  // Default: supabase
-  
+
+Db:
   Provider: supabase
 
-email:
-  // Email provider to pick from
-  // Supported providers: resend, smtp, aws ses
-  // Default: resend
-
+Email:
   Provider: resend
-
+  Sender: floris@xylex.ai

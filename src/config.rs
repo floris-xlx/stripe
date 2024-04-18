@@ -1,10 +1,28 @@
-use std::error::Error;
+//! ## Configuration settings
+//! 
+//!
+//! ### Table of contents 
+//!
+//! ### Errors 
+//!
+//!
+//! ### Troubleshooting
+//!
+//!
+//! ### Usage example
+
+use serde_yaml;
+use serde_json::Value;
+use std::{
+    fs::File,
+    io::BufReader,
+    fs,
+    error::Error
+};
+
 
 use crate::Config;
 
-
-use std::fs;
-use serde_yaml;
 
 impl Config {
     
@@ -35,21 +53,38 @@ impl Config {
     /// 
     /// ### Errors
     /// 
-    pub fn new(
-        config_path: &str
-    ) -> Result<Config, Box<dyn Error>> {
+    pub fn new() -> Self {
+        let mut config: Config = Config {
+            db_provider: String::new(),
+            email_provider: String::new(),
+            sender_email: String::new()
+        };
         
-        let config_str = fs::read_to_string(config_path)?;
-        let config: Config = serde_yaml::from_str(&config_str)?;
+        config.load();
 
-        Ok(config)
+        config
     }
 
-    pub fn get_db_provider(&self) -> &str {
-        &self.db_provider
+    fn load(
+        &mut self
+    ) {
+        // open and read our .yaml file
+        let file: File = File::open("stripe_discord.yaml").expect("Failed to open the stripe_discord.yaml file");   
+        let reader: BufReader<File> = BufReader::new(file);
+
+        // read and iterate over the value keys
+        let value: Value = serde_yaml::from_reader(reader).expect("Failed to read stripe_discord.yaml");
+
+        // load our pre-configed yaml objects from the reader
+        self.db_provider = value["Db"]["Provider"].as_str().unwrap_or("supabase").to_string();
+        self.email_provider = value["Email"]["Provider"].as_str().unwrap_or("resend").to_string();
+        self.sender_email = value["Email"]["Sender"].as_str().unwrap_or("floris@xylex.ai").to_string();
     }
 
-    pub fn get_email_provider(&self) -> &str {
-        &self.email_provider
-    }
 }
+
+
+
+
+
+

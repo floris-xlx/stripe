@@ -5,8 +5,14 @@ use stripe_discord::Config;
 fn main() {
     println!("Hello, world!");
 
-    let config = Config::new("stripe_discord.yaml").unwrap();
+    // create the config instance
+    let config: Config = Config::new();
+
+
+    println!("{:#?}", config)
+
 }
+
 
 
 
