@@ -21,10 +21,10 @@ use std::{
 };
 
 
-use crate::Config;
+use crate::ConfigSetup;
 
 
-impl Config {
+impl ConfigSetup {
     
     /// ## Create a new Config object
     /// 
@@ -54,7 +54,7 @@ impl Config {
     /// ### Errors
     /// 
     pub fn new() -> Self {
-        let mut config: Config = Config {
+        let mut config: ConfigSetup = ConfigSetup {
             db_provider: String::new(),
             email_provider: String::new(),
             sender_email: String::new()
@@ -65,6 +65,7 @@ impl Config {
         config
     }
 
+    
     fn load(
         &mut self
     ) {

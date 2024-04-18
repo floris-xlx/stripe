@@ -1,12 +1,14 @@
-use stripe_discord::Config;
+use stripe_discord::ConfigSetup;
 
 
 
-fn main() {
+
+#[tokio::main(flavor = "multi_thread")]
+async fn main() {
     println!("Hello, world!");
 
     // create the config instance
-    let config: Config = Config::new();
+    let config: ConfigSetup = ConfigSetup::new();
 
 
     println!("{:#?}", config)

@@ -152,6 +152,8 @@ pub mod discord;
 pub mod db;
 pub mod errors;
 pub mod utils;
+pub mod api;
+
 
 use serde_derive::{ 
     Deserialize, 
@@ -163,9 +165,36 @@ use serde_derive::{
 /// This will set the config for the `email` and for the `databasing` solutions
 ///
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Config {
+pub struct ConfigSetup {
     pub db_provider: String,
     pub email_provider: String,
     pub sender_email: String
+}
 
+
+/// # ConfigError
+/// 
+/// This enum represents the different types of errors that can occur when working with the Config struct
+/// 
+/// ## Variants
+/// 
+/// - `FileNotFound` - Indicates that the file was not found at the specified path
+/// - `InvalidFileType` - Indicates that the file type is not supported, expected .yaml file
+/// 
+/// ## Example
+/// ```rust
+/// use crate::ConfigError;
+/// 
+/// let error = ConfigError::FileNotFound("stripe_discord.yaml".to_string());
+/// 
+/// println!("{}", error);
+/// ```
+/// 
+/// ## Usage
+/// This enum is used to represent the different types of errors that can occur when working with the Config struct
+/// 
+#[derive(Debug, Clone)]
+pub enum ConfigError {
+    FileNotFound(String),
+    InvalidFileType(String),
 }
