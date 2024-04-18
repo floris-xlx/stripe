@@ -49,7 +49,7 @@ Required environment variables for Resend:
 Making `resend` your chosen email provider:
 ```yaml
 email:
-  provider: resend
+  Provider: resend
 ```
 
 Setting the correct environment variables for Resend:
@@ -67,7 +67,7 @@ SMTP is a protocol that allows you to send emails from virtually any supported S
 Making `smtp` your chosen email provider:
 ```yaml
 email:
-  provider: smtp
+  Provider: smtp
 ```
 
 Setting the correct environment variables for SMTP:
@@ -86,7 +86,7 @@ SES is a paid email provider that allows you to send emails from virtually any s
 Making `ses` your chosen email provider:
 ```yaml
 email:
-  provider: ses
+  Provider: ses
 ```
 
 Setting the correct environment variables for SES:
@@ -110,7 +110,7 @@ Sled's local so there's no need for any keys or env variables, the downside is t
 Making `sled` your chosen provider:
 ```yaml
 db:
-  provider: sled
+  Provider: sled
 ```
 
 ### Supabase (Db option 2)
@@ -119,7 +119,7 @@ Supabase's online so you worry about less with a tiny bit of added latency and t
 Making `supabase` your chosen provider:
 ```yaml
 db:
-  provider: supabase
+  Provider: supabase
 ```
 If you do not have a supabase account/database set-up you can make a free account and use their free tier here: https://supabase.io/
 

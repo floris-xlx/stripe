@@ -2,4 +2,13 @@ db:
   // Database provider to pick from
   // Supported providers: supabase, sled
   // Default: supabase
-  DbProvider: supabase
+  
+  Provider: supabase
+
+email:
+  // Email provider to pick from
+  // Supported providers: resend, smtp, aws ses
+  // Default: resend
+
+  Provider: resend
+
