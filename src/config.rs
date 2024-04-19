@@ -11,6 +11,8 @@
 //!
 //! ### Usage example
 
+#![allow(unused_imports)]
+
 use serde_yaml;
 use serde_json::Value;
 use std::{
@@ -57,7 +59,11 @@ impl ConfigSetup {
         let mut config: ConfigSetup = ConfigSetup {
             db_provider: String::new(),
             email_provider: String::new(),
-            sender_email: String::new()
+            sender_email: String::new(),
+            host: String::new(),
+            port: 0,
+            supabase_url: String::new(),
+            supabase_key: String::new()
         };
         
         config.load();
@@ -80,7 +86,15 @@ impl ConfigSetup {
         self.db_provider = value["Db"]["Provider"].as_str().unwrap_or("supabase").to_string();
         self.email_provider = value["Email"]["Provider"].as_str().unwrap_or("resend").to_string();
         self.sender_email = value["Email"]["Sender"].as_str().unwrap_or("floris@xylex.ai").to_string();
+        self.host = value["Api"]["Host"].as_str().unwrap_or("0.0.0.0").to_string();
+        self.port = value["Api"]["Port"].as_u64().unwrap_or(8080);
+        self.supabase_url = value["Db"]["SupabaseUrl"].as_str().unwrap_or("https://xxx.supabase.co").to_string();
+
+
+        // load env vars
+        self.supabase_key = std::env::var("SUPABASE_KEY").unwrap_or("xxx".to_string()).to_string();
     }
+    
 
 }
 

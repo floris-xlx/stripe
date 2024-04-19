@@ -1,21 +1,35 @@
-use std::fmt;
-use std::error::Error;
+//! ## Errors
+//! 
+//! This module contains all the errors that are used in the application
+
 use fmt::{
+    Display, 
     Formatter, 
-    Result, 
-    Display
+    Result
 };
+use std::error::Error;
+use std::fmt;
 
 use crate::ConfigError;
 
 
-
-
 impl Display for ConfigError {
-    fn fmt(&self, f: &mut Formatter) -> Result {
+    /// ## Formatting
+    /// 
+    /// This function is used to format the error message
+    /// 
+    fn fmt(
+        &self, 
+        f: &mut Formatter
+    ) -> Result {
+        
         match *self {
             ConfigError::FileNotFound(ref path) => write!(f, "File not found at path: {}", path),
-            ConfigError::InvalidFileType(ref path) => write!(f, "Invalid file type, expected .yaml file at path: {}", path),
+            ConfigError::InvalidFileType(ref path) => write!(
+                f,
+                "Invalid file type, expected .yaml file at path: {}",
+                path
+            ),
         }
     }
 }

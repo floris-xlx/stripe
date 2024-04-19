@@ -1,7 +1,11 @@
-
 Db:
   Provider: supabase
+  SupabaseUrl: https://rtqljtumagvoijilxycn.supabase.co
 
 Email:
   Provider: resend
   Sender: floris@xylex.ai
+
+Api:
+  Host: 0.0.0.0
+  Port: 8080

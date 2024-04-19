@@ -168,7 +168,11 @@ use serde_derive::{
 pub struct ConfigSetup {
     pub db_provider: String,
     pub email_provider: String,
-    pub sender_email: String
+    pub sender_email: String,
+    pub host: String,
+    pub port: u64,
+    pub supabase_url: String,
+    pub supabase_key: String
 }
 
 
