@@ -4,6 +4,11 @@
 //!
 //! This project integrates Stripe with Discord automation. It uses a Rust SDK to listen to Stripe webhooks and then assigns roles in Discord and sends emails via a chosen email provider.
 //!
+//!
+//! REMINDER TO HANDLE ENV VARIABLE:
+//! ALLOW_DIRTY_EMAIL=1
+//!
+//!
 //! ## Required Environment Variables
 //! - `STRIPE_WEBHOOK_SECRET`
 //! - `STRIPE_PRIVATE_API_KEY`
@@ -101,7 +106,7 @@
 //!
 //! Supported databasing instances are:
 //! - `sled` (local)
-//! - `supabase` (online) 
+//! - `supabase` (online)
 //!
 //!
 //! ### Sled (Db option 1)
@@ -140,26 +145,23 @@
 //! ## CLI
 //! There is a CLI to add more organizations to your Stripe config.
 
+// externally exposing the `regex` crate
+extern crate regex;
 
-
-
-pub mod config;
-pub mod auth;
-pub mod tests;
-pub mod organization;
-pub mod email;
-pub mod discord;
-pub mod db;
-pub mod errors;
-pub mod utils;
 pub mod api;
+pub mod auth;
+pub mod config;
+pub mod db;
+pub mod discord;
+pub mod email;
+pub mod errors;
+pub mod organization;
+pub mod tests;
+pub mod utils;
 
+use serde_derive::{Deserialize, Serialize};
 
-use serde_derive::{ 
-    Deserialize, 
-    Serialize 
-};
-
+use crate::email::EmailAddress;
 
 /// ## Configuration #[derive(Debug)]
 /// This will set the config for the `email` and for the `databasing` solutions
@@ -168,37 +170,116 @@ use serde_derive::{
 pub struct ConfigSetup {
     pub db_provider: String,
     pub email_provider: String,
-    pub sender_email: String,
+    pub sender_email: EmailAddress,
     pub host: String,
     pub port: u64,
     pub supabase_url: String,
-    pub supabase_key: String
+    pub supabase_key: String,
 }
 
-
 /// # ConfigError
-/// 
+///
 /// This enum represents the different types of errors that can occur when working with the Config struct
-/// 
+///
 /// ## Variants
-/// 
+///
 /// - `FileNotFound` - Indicates that the file was not found at the specified path
 /// - `InvalidFileType` - Indicates that the file type is not supported, expected .yaml file
-/// 
+///
 /// ## Example
 /// ```rust
 /// use crate::ConfigError;
-/// 
+///
 /// let error = ConfigError::FileNotFound("stripe_discord.yaml".to_string());
-/// 
+///
 /// println!("{}", error);
 /// ```
-/// 
+///
 /// ## Usage
 /// This enum is used to represent the different types of errors that can occur when working with the Config struct
-/// 
+///
 #[derive(Debug, Clone)]
 pub enum ConfigError {
     FileNotFound(String),
     InvalidFileType(String),
+}
+
+/// ## EndpointConfigStripe for `rocket`
+/// This is your entry endpoint configuration that you will attach to your `endpoint_stripe` to
+/// irrigate it with it's configuration.
+///
+///
+/// ### Usage example
+/// ```rust
+///
+///
+/// ```
+///
+/// ### Arguments
+/// - [`endpoint_route`] This will set the api route your endpoint will listen to, (STRIPE HAS TO
+/// MATCH TO WHAT YOU SET HERE).
+/// - [`sender_email`] The email that will send out for this stripe instance.
+/// - [`stripe_publish_key`] This is the *LIVE* publishable key found in your stripe dashboard, for
+/// more infro go to #FIXME
+/// - [`stripe_webhook_secret`] This is the *LIVE* webhook secret that stripe will give you after
+/// assigning an endpoint route in the Stripe dashboard
+/// - [`stripe_private_key`] This is the *LIVE* private api key stripe will give you.
+/// - [`email_template_path`] This has to lead to either HTTP or FilePath of what `.html` email
+/// template should be sent out under the `sender_email`
+/// - [`discord_client_id`] This is the discord `client_id` that is used for `Oath2` Configs
+/// - [`discord_application_id`] This is the discord application id that is used to assign a
+/// specific discord application
+/// - [`discord_role_id`] This is the `role_id` members should receive or be revoked based on
+/// Stripe dictation
+/// - [`discord_guild_id`] This is the `guild_id` of your server where the members should receive
+/// said `role_id`
+/// - [`discord_bot_token`] This is the discord `bot_token` for authenticating into your `discord`
+/// bot to mitigate `Oath2` limitations such as revoking roles when subscription fails, Read more
+/// -> FIXME
+/// - [`replace_keys_with_env_names`] When `enabled` it will extract the aforementioned from an
+/// `.env` file by the by your provided `.env` names
+///
+///
+/// ### Implementations
+///
+///
+/// ### Returns
+///
+/// ### Errors
+///
+/// ### Notes
+/// * Discord roles can only be revoked OUTSIDE of the traditional `Oath2` portal otherwise discord
+/// users would need to supply permissions themselves
+/// * When `replace_keys_with_env_names` - This DEFAULTS to FALSE, is enabled it will NOT accept the traditional keys,
+///
+/// FIXME
+/// NONE OF THESE ARGUMENTS ARE `TYPED` NOR IMPLEMENTED OR HANDLED YET
+///
+/// MAKE THE ACTUAL ENDPOINT IMPLEMENTATION DERIVE FROM EITHER AN ORGANIZATION OR FROM A CONFIG
+///
+///
+///
+#[derive(Clone, Debug)]
+pub struct EndpointConfigStripe {
+    pub endpoint_route: String,
+    // import the email type from the email module but make sure to implement a string derivative
+    pub sender_email: EmailAddress,
+
+    // handled by auth
+    pub stripe_publish_key: String,
+    pub stripe_webhook_secret: String,
+    pub stripe_private_key: String,
+
+    // email html file
+    pub email_template_path: String,
+
+    // handled by discord auth client router
+    //
+    //
+    pub discord_client_id: String,
+    pub discord_application_id: String,
+    pub discord_role_id: i64,
+    pub discord_guild_id: i64,
+    pub discord_bot_token: String,
+    pub replace_keys_with_env_names: bool,
 }
