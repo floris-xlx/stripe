@@ -1,13 +1,9 @@
-//! ## Format
-//! 
+//! ## Formatting database related data
+//!
 //! This module contains the format logic for the Database.
-use supabase_rs::SupabaseClient;
+use crate::db::{SledDb, SupabaseDb};
 use crate::ConfigSetup;
-use crate::db::{
-    SupabaseDb, 
-    SledDb
-};
-
+use supabase_rs::SupabaseClient;
 
 /// Represents a connection to a Supabase database.
 impl SupabaseDb {
@@ -19,10 +15,9 @@ impl SupabaseDb {
         Self {
             supabase_url: Self::supabase_url(),
             supabase_key: Self::supabase_key(),
-            supabase: Self::supabase()
+            supabase: Self::supabase(),
         }
     }
-    
 
     /// Retrieves the Supabase URL from the configuration.
     ///
@@ -34,7 +29,6 @@ impl SupabaseDb {
         config.supabase_url
     }
 
-
     /// Retrieves the Supabase Key from the configuration.
     ///
     /// # Returns
@@ -45,15 +39,11 @@ impl SupabaseDb {
         config.supabase_key
     }
 
-
     /// Creates a new Supabase client using the URL and Key.
     ///
     /// # Returns
     /// A `SupabaseClient` instance for interacting with the Supabase database.
     fn supabase() -> SupabaseClient {
-        SupabaseClient::new(
-            Self::supabase_url(), 
-            Self::supabase_key()
-        )
+        SupabaseClient::new(Self::supabase_url(), Self::supabase_key())
     }
 }

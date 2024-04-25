@@ -1,4 +1,4 @@
-//! ## Errors
+//! ## Custom error handling
 //!
 //! ### How to map an error type
 //!

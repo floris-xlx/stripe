@@ -2,12 +2,11 @@
 //!
 //! ### Table of contents
 
-
 pub mod client;
 pub mod errors;
 pub mod events;
-pub mod success;
 pub mod format;
+pub mod success;
 
 /// ## Base construction for the `Api`
 ///
@@ -23,9 +22,5 @@ pub mod format;
 pub struct Api {
     pub host: String,
     pub port: u64,
-    pub address: String
+    pub address: String,
 }
-
-
-
-

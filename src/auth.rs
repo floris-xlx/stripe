@@ -1,4 +1,4 @@
-//! ## Authenticating of `stripe` & `discord`
+//! ## Authenticating of `stripe`, `discord`, `emailing` and `databasing` keys
 //!
 //! ### Table of contents
 //! - Authenticating all `stripe` keys & secrets

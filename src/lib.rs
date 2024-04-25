@@ -151,26 +151,27 @@ extern crate regex;
 pub mod api;
 pub mod auth;
 pub mod config;
+pub mod data;
 pub mod db;
 pub mod discord;
 pub mod email;
 pub mod errors;
+pub mod events;
+pub mod log;
 pub mod organization;
 pub mod tests;
 pub mod utils;
-
-use serde_derive::{Deserialize, Serialize};
 
 use crate::email::EmailAddress;
 
 /// ## Configuration #[derive(Debug)]
 /// This will set the config for the `email` and for the `databasing` solutions
 ///
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug)]
 pub struct ConfigSetup {
     pub db_provider: String,
     pub email_provider: String,
-    pub sender_email: EmailAddress,
+    pub sender_email: String,
     pub host: String,
     pub port: u64,
     pub supabase_url: String,
