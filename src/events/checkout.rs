@@ -8,6 +8,10 @@
 
 use crate::events::Checkout;
 
+pub enum CheckoutEvent {
+    SessionCompleted,
+}
+
 impl Checkout {
     /// ## checkout.session.completed
     pub fn session_completed(&self) {

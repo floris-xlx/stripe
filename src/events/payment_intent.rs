@@ -11,6 +11,12 @@
 
 use crate::events::PaymentIntent;
 
+pub enum PaymentIntentEvents {
+    Succeeded,
+    PaymentFailed,
+    Created,
+}
+
 impl PaymentIntent {
     /// ## payment_intent.succeeded
     pub fn succeeded(&self) {

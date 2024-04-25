@@ -9,6 +9,11 @@
 
 use crate::events::Charge;
 
+pub enum ChargeEvent {
+    Succeeded,
+    Failed,
+}
+
 impl Charge {
     /// ## charge.succeeded
     pub fn succeeded(&self) {
