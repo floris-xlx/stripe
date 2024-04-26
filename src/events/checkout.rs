@@ -14,6 +14,7 @@ use crate::events::Checkout;
 ///
 /// ## Variants
 /// - `SessionCompleted` - Represents the `checkout.session.completed` event
+#[derive(Debug, Clone)]
 pub enum CheckoutEvent {
     SessionCompleted,
 }
@@ -28,7 +29,7 @@ pub enum CheckoutEvent {
 /// - `paid_status` - The paid status of the user
 /// - `created_at` - The created at timestamp
 /// - `country` - The country of the user
-///
+#   
 pub struct SessionCompleted {
     pub email: String,
     pub name: String,

@@ -15,6 +15,7 @@ use serde_json::Value;
 
 use crate::events::PaymentIntent;
 
+#[derive(Debug, Clone)]
 pub enum PaymentIntentEvents {
     Succeeded,
     PaymentFailed,
@@ -29,6 +30,7 @@ pub enum PaymentIntentEvents {
 /// - `paid_status` - The paid status of the user
 /// - `amount` - The amount of the payment_intent
 ///
+#[derive(Debug, Clone)]
 pub struct Succeeded {
     pub created_at: i64,
     pub paid_status: bool,
@@ -44,7 +46,7 @@ pub struct Succeeded {
 /// - `paid_status` - The paid status of the user
 /// - `created_at` - The created at timestamp
 /// - `country` - The country of the user
-///
+#[derive(Debug, Clone)]
 pub struct PaymentFailed {
     pub email: String,
     pub name: String,
@@ -58,6 +60,7 @@ pub struct PaymentFailed {
 ///
 /// ### Fields
 /// - `country` - The country of the payment intent
+#[derive(Debug, Clone)]
 pub struct Created {
     pub country: String,
 }

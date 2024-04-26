@@ -21,6 +21,7 @@ pub mod payment_intent;
 /// - `PaymentIntent` - Represents the `payment_intent` event
 /// - `Charge` - Represents the `charge` event
 /// - `Checkout` - Represents the `checkout` event
+#[derive(Debug, Clone)]
 pub enum EventHandler {
     PaymentIntent,
     Charge,
@@ -29,7 +30,7 @@ pub enum EventHandler {
 
 /// ## PaymentIntent
 /// This struct represents the `payment_intent` event
-///
+#[derive(Debug, Clone)]
 pub struct PaymentIntent {
     pub event_title: String,
     pub event_object: Value,
@@ -38,7 +39,7 @@ pub struct PaymentIntent {
 
 /// ## Charge
 /// This struct represents the `charge` event
-///
+#[derive(Debug, Clone)]
 pub struct Charge {
     pub event_title: String,
     pub event_object: Value,
@@ -47,7 +48,7 @@ pub struct Charge {
 
 /// ## Checkout
 /// This struct represents the `checkout` event
-///
+#[derive(Debug, Clone)]
 pub struct Checkout {
     pub event_title: String,
     pub event_object: Value,

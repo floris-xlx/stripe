@@ -9,6 +9,7 @@
 
 use crate::events::Charge;
 
+#[derive(Debug, Clone)]
 pub enum ChargeEvent {
     Succeeded,
     Failed,
@@ -26,7 +27,7 @@ pub enum ChargeEvent {
 /// - `created_at` - The created at timestamp
 /// - `country` - The country of the user
 ///
-///
+#[derive(Debug, Clone)]
 pub struct Succeeded {
     pub email: String,
     pub name: String,
