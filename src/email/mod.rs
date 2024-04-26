@@ -39,8 +39,8 @@ pub mod utils;
 ///
 #[derive(Debug, Clone)]
 pub struct Email {
-    pub to: EmailAddress,
-    pub from: EmailAddress,
+    pub to: String,
+    pub from: String,
     pub subject: String,
     pub body: String,
 }

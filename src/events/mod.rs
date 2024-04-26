@@ -8,6 +8,8 @@
 //!
 //!
 
+use serde_json::Value;
+
 pub mod charge;
 pub mod checkout;
 pub mod payment_intent;
@@ -30,6 +32,7 @@ pub enum EventHandler {
 ///
 pub struct PaymentIntent {
     pub event_title: String,
+    pub event_object: Value,
     // pub payment_intent_error: String // this is a placeholder
 }
 
@@ -38,6 +41,7 @@ pub struct PaymentIntent {
 ///
 pub struct Charge {
     pub event_title: String,
+    pub event_object: Value,
     // pub charge_error: String // this is a placeholder
 }
 
@@ -46,5 +50,6 @@ pub struct Charge {
 ///
 pub struct Checkout {
     pub event_title: String,
+    pub event_object: Value,
     // pub checkout_error: String // this is a placeholder
 }

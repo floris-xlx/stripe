@@ -166,7 +166,7 @@ use crate::email::EmailAddress;
 
 /// ## Configuration #[derive(Debug)]
 /// This will set the config for the `email` and for the `databasing` solutions
-///
+/// NOTE: THIS WILL BE USED TO EITHER REPLACE THE .YAML OR GENERATE ONE !!
 #[derive(Debug)]
 pub struct ConfigSetup {
     pub db_provider: String,
@@ -264,7 +264,6 @@ pub enum ConfigError {
 pub struct EndpointConfigStripe {
     pub endpoint_route: String,
     // import the email type from the email module but make sure to implement a string derivative
-    pub sender_email: EmailAddress,
 
     // handled by auth
     pub stripe_publish_key: String,
@@ -283,4 +282,22 @@ pub struct EndpointConfigStripe {
     pub discord_guild_id: i64,
     pub discord_bot_token: String,
     pub replace_keys_with_env_names: bool,
+}
+
+/// ## Organization struct
+/// This struct represents the organization data that is used to create a new organization
+/// profile
+///
+/// ### Fields
+/// - `name` - The name of the organization
+/// - `stripe_key` - The stripe key of the organization
+/// - `stripe_secret` - The stripe secret of the organization
+/// - `stripe_webhook_secret` - The stripe webhook secret of the organization
+/// - `config` - The stripe endpoint config of the organization`
+///
+pub struct Organization {
+    /// `The name of the organization that is used to identify the organization in the db`
+    pub name: String,
+    /// `We need the [endpoint_route] to route to the correct endpoint and attach a probe to it, so we can be alerted when the endpoint is down`
+    pub sender_email: String,
 }

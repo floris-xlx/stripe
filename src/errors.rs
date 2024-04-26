@@ -12,6 +12,7 @@
 //!
 //!
 
+// REPLACE THIS WITH `thiserror` WHEN MORE INFRA IS BUILT
 use fmt::{Display, Formatter, Result};
 use std::error::Error;
 use std::fmt;

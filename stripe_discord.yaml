@@ -4,7 +4,7 @@ Db:
 
 Email:
   Provider: resend
-  Sender: floris@xylex.ai
+  Sender: floris@xylex.cloud
 
 Api:
   Host: 0.0.0.0

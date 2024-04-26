@@ -19,6 +19,24 @@ use std::{error::Error, fs, fs::File, io::BufReader};
 
 use crate::ConfigSetup;
 
+impl Default for ConfigSetup {
+    /// ## Default implementation for Config
+    /// # NOTE: THIS WILL NOT WORK IT IS PURELY FOR DOCUMENTATION PURPOSES
+    /// This function will create a default Config object
+    ///
+    fn default() -> Self {
+        ConfigSetup {
+            db_provider: "supabase".to_string(),
+            email_provider: "resend".to_string(),
+            sender_email: "test@example.com".to_string(),
+            host: "0.0.0.0".to_string(),
+            port: 8080,
+            supabase_url: "https://xxx.supabase.co".to_string(),
+            supabase_key: "xxx".to_string(),
+        }
+    }
+}
+
 impl ConfigSetup {
     /// ## Create a new Config object
     ///

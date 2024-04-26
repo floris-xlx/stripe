@@ -9,12 +9,26 @@
 //!
 //!
 
+use serde_json::Value;
+
+// import the data Types
+use crate::data::types::{Payment, Subscription, User};
+
 use crate::events::PaymentIntent;
 
 pub enum PaymentIntentEvents {
     Succeeded,
     PaymentFailed,
     Created,
+}
+
+/// ## PaymentIntent.succeeded event scope
+pub struct Succeeded {
+    pub event_title: String,
+
+    // the event_object captures the raw data object we get from stripe
+    pub event_object: Value,
+    pub created_at: i64,
 }
 
 impl PaymentIntent {
