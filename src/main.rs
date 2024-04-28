@@ -19,19 +19,23 @@ async fn main() {
         std::env::var("SUPABASE_KEY").expect("SUPABASE_KEY must be set"),
     );
 
-    let customer_id = CustomerId::new("customer_cooking".to_string());
+    // Assuming `stripe_discord::CustomerId` takes a string and CustomerId::new returns a Future which resolves to a String
+
     let email = "hadi@xylex.ai".to_string();
 
-    let customer_id = CustomerId::attach_email(customer_id.clone(), email, supabase_client.clone())
-        .await
-        .unwrap();
+    println!("Email: {:?}", email);
 
-    let customer_email = CustomerId::get_email(customer_id.clone(), supabase_client.clone())
-        .await
-        .unwrap();
+    //let customer_id = CustomerId::attach_email(customer_id.clone(), email, supabase_client.clone())
 
-    println!("Customer email: {:?}", customer_email);
+    //  .await
+    //.unwrap();
 
-    println!("Supabase client: {:?}", supabase_client);
-    println!("Customer ID: {:?}", customer_id);
+    //let customer_email = CustomerId::get_email(customer_id.clone(), supabase_client.clone())
+    //.await
+    //.unwrap();
+
+    //println!("Customer email: {:?}", customer_email);
+
+    // println!("Supabase client: {:?}", supabase_client);
+    //println!("Customer ID: {:?}", customer_id);
 }

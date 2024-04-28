@@ -19,10 +19,34 @@ use crate::overwrite::{
 
 use serde_json::json;
 use serde_json::Value;
+use std::env::var;
 use std::error::Error;
 use supabase_rs::SupabaseClient;
 
 impl CustomerId {
+    /// ## `new` that initializes a new instance and inserts the `CustomerId` to supabase with
+    /// nothing else
+    ///
+    pub async fn new(customer_id: CustomerId) -> Result<CustomerId, Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_customer_table_name();
+        let column_name_customer_id: String = overwrite_stripe_customer_id_column_name();
+
+        // init the supabase client using the standard env vars
+        let supabase =
+            SupabaseClient::new(var("SUPABASE_URL").unwrap(), var("SUPABASE_KEY").unwrap());
+
+        let result_customer_id: String = supabase
+            .insert(
+                &table_name,
+                json!({
+                    column_name_customer_id: customer_id.id
+                }),
+            )
+            .await?;
+
+        Ok(customer_id)
+    }
+
     /// ## Attach or overwrite an `EmailAddress` to a `CustomerId` in Supabase
     /// This will attach or overwrite an `EmailAddress` to a `CustomerId` in Supabase
     ///
@@ -54,7 +78,7 @@ impl CustomerId {
         email: String,
         supabase: SupabaseClient,
     ) -> Result<CustomerId, Box<dyn Error>> {
-        // temp check if the table name and column names are being overwritten
+        // temp check if the tabVle name and column names are being overwritten
         let table_name: String = overwrite_stripe_customer_table_name();
         let column_name_email: String = overwrite_stripe_email_column_name();
         let column_name_customer_id: String = overwrite_stripe_customer_id_column_name();
@@ -100,8 +124,6 @@ impl CustomerId {
         Ok(customer_id)
     }
 
-
-    
     /// # get_email
     /// Retrieves the email address associated with a given `CustomerId` from the Supabase database.
     ///
@@ -132,7 +154,7 @@ impl CustomerId {
         let column_name_email: String = overwrite_stripe_email_column_name();
         let column_name_customer_id: String = overwrite_stripe_customer_id_column_name();
 
-        let result_get_email = supabase
+        let result_get_email: Vec<Value> = supabase
             .select(&table_name)
             .eq(&column_name_customer_id, customer_id.as_str())
             .execute()
@@ -141,7 +163,9 @@ impl CustomerId {
 
         println!("{:#?}", result_get_email);
 
-        let customer_data_from_result: &Value = result_get_email.first().expect("Failed extracting email from Supabase response for `get_email`");
+        let customer_data_from_result: &Value = result_get_email
+            .first()
+            .expect("Failed extracting email from Supabase response for `get_email`");
 
         let email: String = customer_data_from_result["email"]
             .as_str()

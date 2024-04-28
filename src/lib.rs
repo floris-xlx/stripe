@@ -158,9 +158,9 @@ pub mod errors;
 pub mod events;
 pub mod log;
 pub mod organization;
+pub mod overwrite;
 pub mod tests;
 pub mod utils;
-pub mod overwrite;
 
 use crate::email::EmailAddress;
 
@@ -319,28 +319,6 @@ pub struct CustomerId {
 }
 
 impl CustomerId {
-    /// ## Create a new `CustomerId`
-    /// This function creates a new `CustomerId` from the provided customer id
-    ///
-    /// ### Parameters
-    /// - `customer_id` - The customer id to create  
-    ///
-    /// ### Returns
-    /// A new `CustomerId` with the provided customer id
-    ///
-    /// ### Examples
-    /// ```rust
-    /// use stripe_discord::CustomerId;
-    ///
-    /// let customer_id = CustomerId::new("cus_12345".to_string());
-    /// assert_eq!(customer_id.id, "cus_12345");
-    /// ```
-    ///
-    ///
-    pub fn new(customer_id: String) -> Self {
-        Self { id: customer_id }
-    }
-    
     /// # as_str
     /// Returns a string slice of the CustomerId's `id`.
     ///
