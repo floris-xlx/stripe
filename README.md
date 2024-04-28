@@ -19,7 +19,7 @@ This project integrates Stripe with Discord automation. It uses a Rust SDK to li
 
 
 ## Automatic Emails
-When automatic emails are enabled, you can choose between Resend, Amazon Simple Email, or SMTP. Templates go in HTML format in `./email/templates`.
+When automatic emails are enabled, you can choose between Resend, SMTP. Templates go in HTML format in `./email/templates`.
 
 ### Dynamically populating emails
 You can use these pre-built placeholders that are extracted from the Stripe payment to customize and design your email template around these with no additional effort.
@@ -34,12 +34,10 @@ For placeholders:
 These are used to personalize emails and use payment-oriented references.
 
 ### Picking an email provider
-In the `stripe_discord.yaml` file, you can opt for one of the following email providers:
-- `resend`
-- `smtp`
-- `ses` (Amazon Simple Email)
+Pass either `resend` or `smtp` in the email config
 
-### Resend (Email option 1)
+
+### Resend (Email option 1 - Serverless)
 Resend is a free email provider that allows you to send 3k emails per month for free. You can sign up for an account [here](https://resend.io/).
 
 Required environment variables for Resend:

@@ -4,6 +4,35 @@
 //!
 //! This project integrates Stripe with Discord automation. It uses a Rust SDK to listen to Stripe webhooks and then assigns roles in Discord and sends emails via a chosen email provider.
 //!
+//! ## Getting started
+//! To get started, add the following dependencies to your `Cargo.toml` file:
+//! ```toml
+//! [dependencies]
+//! stripe_discord = "0.1.0"
+//! ```
+//!
+//! ## Features
+//! - Stripe webhook listener
+//! - Discord role assignment
+//! - Email notifications
+//! - Supabase and Sled database supported
+//!
+//! ## Prerequisites
+//! - Stripe account with developer access
+//! - Discord bot with OAuth2 access
+//! - Email provider (Resend or SMTP)
+//! - Supabase account (Free)
+//! - `SUPABASE_URL` and `SUPABASE_KEY` environment variables
+//! - `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRIVATE_API_KEY`, and `STRIPE_PUBLISH_KEY` environment variables
+//! - `SMTP_HOST`, `SMTP_PORT`, and `SENDER_EMAIL` environment variables (only if using SMTP)
+//! - `RESEND_API_KEY` and `SENDER_EMAIL` environment variables (only if using Resend)
+//!
+//!
+//! ## Overwriting the default Supabase table names and column names
+//! You can overwrite the default Supabase table names and column names by setting the following environment variables:
+//! - `OVERWRITE_STRIPE_CUSTOMER_TABLE_NAME` (default: `stripe_customer_data`) to overwrite the default table name for the customer data in Supabase
+//!
+//!
 //!
 //! REMINDER TO HANDLE ENV VARIABLE:
 //! ALLOW_DIRTY_EMAIL=1
@@ -19,12 +48,9 @@
 //! - `SMTP_HOST`
 //! - `SMTP_PORT`
 //! - `SMTP_EMAIL_ADDRESS`
-//! - `AWS_ACCESS_KEY_ID`
-//! - `AWS_SECRET_ACCESS_KEY`
-//! - `AWS_EMAIL`
 //!
 //! ## Automatic Emails
-//! When automatic emails are enabled, you can choose between Resend, Amazon Simple Email, or SMTP. Templates go in HTML format in `./email/templates`.
+//! When automatic emails are enabled, you can choose between Resend or SMTP. Templates go in HTML format in `./email/templates`.
 //!
 //! ### Dynamically populating emails
 //! You can use these pre-built placeholders that are extracted from the Stripe payment to customize and design your email template around these with no additional effort.
@@ -42,7 +68,6 @@
 //! In the `stripe_discord.yaml` file, you can opt for one of the following email providers:
 //! - `resend`
 //! - `smtp`
-//! - `ses` (Amazon Simple Email)
 //!
 //! ### Resend (Email option 1)
 //! Resend is a free email provider that allows you to send 3k emails per month for free. You can sign up for an account [here](https://resend.io/).
@@ -82,24 +107,6 @@
 //! SMTP_EMAIL_ADDRESS=
 //! ```
 //!
-//! ### SES, Amazon Simple Email (Email option 3)
-//! SES is a paid email provider that allows you to send emails from virtually any supported SMTP provider, You will need to provide the following environment variables for SMTP:
-//! - `smtp_host`
-//! - `smtp_port`
-//! - `smtp_email_address`
-//!
-//! Making `ses` your chosen email provider:
-//! ```yaml
-//! email:
-//!   Provider: ses
-//! ```
-//!
-//! Setting the correct environment variables for SES:
-//! ```env
-//! AWS_ACCESS_KEY_ID=
-//! AWS_SECRET_ACCESS_KEY=
-//! AWS_EMAIL=
-//! ```
 //!
 //! ## Databasing
 //! In the `stripe_discord.yaml` file, you can choose between Sled and Supabase.
@@ -161,6 +168,7 @@ pub mod log;
 pub mod organization;
 pub mod tests;
 pub mod utils;
+pub mod overwrite;
 
 use crate::email::EmailAddress;
 
@@ -300,4 +308,48 @@ pub struct Organization {
     pub name: String,
     /// `We need the [endpoint_route] to route to the correct endpoint and attach a probe to it, so we can be alerted when the endpoint is down`
     pub sender_email: String,
+}
+
+/// ## Customer ID for Stripe
+/// This struct represents the customer ID for Stripe
+///
+/// ### Fields
+/// - `id` - The customer id
+///
+/// ### Implementations
+/// - `new` - This function creates a new `CustomerId` from the provided customer id
+/// - `attach_email` - This function attaches an email to the customer id in Supabase
+/// - `FetchEmail` - This trait is used to fetch the email of the customer id
+///
+#[derive(Debug, Clone)]
+pub struct CustomerId {
+    pub id: String,
+}
+
+impl CustomerId {
+    /// ## Create a new `CustomerId`
+    /// This function creates a new `CustomerId` from the provided customer id
+    ///
+    /// ### Parameters
+    /// - `customer_id` - The customer id to create  
+    ///
+    /// ### Returns
+    /// A new `CustomerId` with the provided customer id
+    ///
+    /// ### Examples
+    /// ```rust
+    /// use stripe_discord::CustomerId;
+    ///
+    /// let customer_id = CustomerId::new("cus_12345".to_string());
+    /// assert_eq!(customer_id.id, "cus_12345");
+    /// ```
+    ///
+    ///
+    pub fn new(customer_id: String) -> Self {
+        Self { id: customer_id }
+    }
+
+    pub fn as_str(&self) -> &str {
+        self.id.as_str()
+    }
 }

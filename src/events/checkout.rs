@@ -29,7 +29,7 @@ pub enum CheckoutEvent {
 /// - `paid_status` - The paid status of the user
 /// - `created_at` - The created at timestamp
 /// - `country` - The country of the user
-#   
+
 pub struct SessionCompleted {
     pub email: String,
     pub name: String,
@@ -38,6 +38,7 @@ pub struct SessionCompleted {
     pub created_at: i64,
     pub country: String,
 }
+
 
 impl Checkout {
     /// ## checkout.session.completed

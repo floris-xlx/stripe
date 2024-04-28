@@ -3,27 +3,35 @@ use stripe_discord::email::resend::send_email_html;
 
 use stripe_discord::Organization;
 
+use supabase_rs::SupabaseClient;
+
+use stripe_discord::CustomerId;
+
 #[tokio::main(flavor = "multi_thread")]
 async fn main() {
     println!("Hello, world!");
 
-    // create a new Organization
-    let organization = Organization::new("cooking".to_string(), "billing@xylex.cloud".to_string());
+    use dotenv::dotenv;
+    dotenv().ok();
 
-    let resend_api_key = "xxx".to_string();
+    let supabase_client = SupabaseClient::new(
+        std::env::var("SUPABASE_URL").expect("SUPABASE_URL must be set"),
+        std::env::var("SUPABASE_KEY").expect("SUPABASE_KEY must be set"),
+    );
 
-    // authenticate with resend
-    let client = authenticate(resend_api_key);
+    let customer_id = CustomerId::new("customer_cooking".to_string());
+    let email = "hadi@xylex.ai".to_string();
 
-    // send an email
-    let to = vec!["floris@xylex.ai".to_string()];
-    let subject = "Welcome to Cooking".to_string();
-    let html = "<h1>Welcome to Cooking</h1>".to_string();
-    let attachments = None;
+    // let customer_id = CustomerId::attach_email(customer_id.clone(), email, supabase_client.clone())
+    // .await
+    //.unwrap();
 
-    let email_sent_status = send_email_html(client, organization, to, subject, html, attachments)
+    let customer_email = CustomerId::get_email(customer_id.clone(), supabase_client.clone())
         .await
         .unwrap();
 
-    println!("Email sent with ID: {}", email_sent_status);
+    println!("Customer email: {:?}", customer_email);
+
+    println!("Supabase client: {:?}", supabase_client);
+    println!("Customer ID: {:?}", customer_id);
 }
