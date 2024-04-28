@@ -27,15 +27,31 @@ pub mod format;
 pub mod operations;
 pub mod supabase;
 
-/// ## Initialize the Supabase client
-/// This function initializes the Supabase client
+
+/// # init_supabase_client
+/// Initializes and returns a new instance of the Supabase client configured with environment variables.
 ///
+/// ## Arguments
+/// This function does not take any arguments directly. However, it retrieves the following from environment variables:
+/// - `SUPABASE_URL`: The URL of the Supabase project.
+/// - `SUPABASE_KEY`: The secret key used for authenticating with the Supabase API.
+///
+/// ## Returns
+/// Returns a `SupabaseClient` object configured with the specified URL and key.
+/// If the environment variables are not set, the function will panic with an error message.
+///
+/// ## Examples
+/// ```
+/// let client = init_supabase_client();
+/// // Now `client` can be used to interact with Supabase services.
+/// ```
 pub fn init_supabase_client() -> SupabaseClient {
-    let supabase_url = var("SUPABASE_URL").expect("SUPABASE_URL must be set");
-    let supabase_key = var("SUPABASE_KEY").expect("SUPABASE_KEY must be set");
+    let supabase_url: String = var("SUPABASE_URL").expect("SUPABASE_URL must be set");
+    let supabase_key: String = var("SUPABASE_KEY").expect("SUPABASE_KEY must be set");
 
     SupabaseClient::new(supabase_url, supabase_key)
 }
+
 
 /// ## CRUD operations
 ///

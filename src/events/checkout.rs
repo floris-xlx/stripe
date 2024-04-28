@@ -41,13 +41,21 @@ pub struct SessionCompleted {
 
 
 impl Checkout {
-    /// ## checkout.session.completed
+    /// # session_completed
+    /// Logs a message indicating that a checkout session has been completed.
     ///
-    /// ### Example
+    /// ## Arguments
+    /// - `self`: Reference to the instance of the `Checkout` struct.
+    ///
+    /// ## Returns
+    /// This function does not return any value.
+    ///
+    /// ## Examples
     /// ```rust
-    /// use stripe_discord::events::Checkout;
+    /// use crate::events::Checkout;
     ///
-    /// let checkout = Checkout WIP WIP WIP
+    /// let checkout = Checkout::new("Session Title");
+    /// checkout.session_completed();
     /// ```
     pub fn session_completed(&self) {
         println!("Checkout session completed: {}", self.event_title);

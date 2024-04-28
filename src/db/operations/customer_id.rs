@@ -100,7 +100,30 @@ impl CustomerId {
         Ok(customer_id)
     }
 
-    /// ## Get Email by `customerId`
+
+    
+    /// # get_email
+    /// Retrieves the email address associated with a given `CustomerId` from the Supabase database.
+    ///
+    /// ## Arguments
+    /// - `customer_id`: `CustomerId` - The unique identifier for the customer whose email is being retrieved.
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database.
+    ///
+    /// ## Returns
+    /// - `Result<String, Box<dyn Error>>`: This function returns a `Result` which is either:
+    ///   - `Ok(String)`: The email address of the customer if found.
+    ///   - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    ///
+    /// ## Examples
+    /// ```rust
+    /// async fn example_usage() -> Result<(), Box<dyn Error>> {
+    ///     let customer_id = CustomerId::new("some_unique_id");
+    ///     let supabase_client = SupabaseClient::new("your_supabase_url", "your_supabase_key");
+    ///     let email = get_email(customer_id, supabase_client).await?;
+    ///     println!("Email: {}", email);
+    ///     Ok(())
+    /// }
+    /// ```
     pub async fn get_email(
         customer_id: CustomerId,
         supabase: SupabaseClient,
@@ -114,8 +137,7 @@ impl CustomerId {
             .eq(&column_name_customer_id, customer_id.as_str())
             .execute()
             .await
-            .unwrap()
-            ;
+            .unwrap();
 
         println!("{:#?}", result_get_email);
 

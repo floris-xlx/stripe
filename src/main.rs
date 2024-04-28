@@ -22,9 +22,9 @@ async fn main() {
     let customer_id = CustomerId::new("customer_cooking".to_string());
     let email = "hadi@xylex.ai".to_string();
 
-    // let customer_id = CustomerId::attach_email(customer_id.clone(), email, supabase_client.clone())
-    // .await
-    //.unwrap();
+    let customer_id = CustomerId::attach_email(customer_id.clone(), email, supabase_client.clone())
+        .await
+        .unwrap();
 
     let customer_email = CustomerId::get_email(customer_id.clone(), supabase_client.clone())
         .await

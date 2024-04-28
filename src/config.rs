@@ -20,10 +20,33 @@ use std::{error::Error, fs, fs::File, io::BufReader};
 use crate::ConfigSetup;
 
 impl Default for ConfigSetup {
-    /// ## Default implementation for Config
-    /// # NOTE: THIS WILL NOT WORK IT IS PURELY FOR DOCUMENTATION PURPOSES
-    /// This function will create a default Config object
+    /// # default
+    /// Creates a default `ConfigSetup` instance with predefined values.
     ///
+    /// ## Arguments
+    /// This function takes no arguments.
+    ///
+    /// ## Returns
+    /// Returns a `ConfigSetup` instance with the following predefined values:
+    /// - `db_provider`: "supabase" - Default database provider.
+    /// - `email_provider`: "resend" - Default email provider.
+    /// - `sender_email`: "test@example.com" - Default sender email address.
+    /// - `host`: "0.0.0.0" - Default host address.
+    /// - `port`: 8080 - Default port number.
+    /// - `supabase_url`: "https://xxx.supabase.co" - Default Supabase URL.
+    /// - `supabase_key`: "xxx" - Default Supabase API key.
+    ///
+    /// ## Examples
+    /// ```rust
+    /// let config = ConfigSetup::default();
+    /// assert_eq!(config.db_provider, "supabase");
+    /// assert_eq!(config.email_provider, "resend");
+    /// assert_eq!(config.sender_email, "test@example.com");
+    /// assert_eq!(config.host, "0.0.0.0");
+    /// assert_eq!(config.port, 8080);
+    /// assert_eq!(config.supabase_url, "https://xxx.supabase.co");
+    /// assert_eq!(config.supabase_key, "xxx");
+    /// ```
     fn default() -> Self {
         ConfigSetup {
             db_provider: "supabase".to_string(),
@@ -120,3 +143,4 @@ impl ConfigSetup {
             .to_string();
     }
 }
+

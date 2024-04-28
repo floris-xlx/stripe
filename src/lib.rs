@@ -116,14 +116,6 @@
 //! - `supabase` (online)
 //!
 //!
-//! ### Sled (Db option 1)
-//! Sled's local so there's no need for any keys or env variables, the downside is that you will need some type of disk retention to keep the database alive.
-//!
-//! Making `sled` your chosen provider:
-//! ```yaml
-//! db:
-//!   Provider: sled
-//! ```
 //!
 //! ### Supabase (Db option 2)
 //! Supabase's online so you worry about less with a tiny bit of added latency and they have a very generous free tier
@@ -348,7 +340,23 @@ impl CustomerId {
     pub fn new(customer_id: String) -> Self {
         Self { id: customer_id }
     }
-
+    
+    /// # as_str
+    /// Returns a string slice of the CustomerId's `id`.
+    ///
+    /// ## Arguments
+    /// - `&self` - A reference to the instance of `CustomerId` from which the `id` is retrieved.
+    ///
+    /// ## Returns
+    /// A string slice (`&str`) representing the `id` of the customer.
+    ///
+    /// ## Examples
+    /// ```rust
+    /// use stripe_discord::CustomerId;
+    ///
+    /// let customer_id = CustomerId::new("cus_12345".to_string());
+    /// assert_eq!(customer_id.as_str(), "cus_12345");
+    /// ```
     pub fn as_str(&self) -> &str {
         self.id.as_str()
     }

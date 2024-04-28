@@ -21,17 +21,23 @@ pub mod router;
 /// This is the implementation of the `Organization` struct
 ///
 impl Organization {
-    /// ## Create a new Organization
-    /// This will create a new Organization with the given `name` and `email`
+    /// # new
+    /// Constructs a new `Organization` instance with specified name and sender email.
     ///
-    /// ### Parameters
-    /// - `name` - The name of the Organization
-    /// - `email` - The email of the Organization
+    /// ## Arguments
+    /// - `name`: `String` - The name of the Organization.
+    /// - `sender_email`: `String` - The email address associated with the Organization.
     ///
-    /// ### Returns
-    /// The newly created Organization
+    /// ## Returns
+    /// - `Organization`: Returns a new instance of `Organization` populated with the provided name and email.
     ///
-    /// ### Examples (wip)
+    /// ## Examples
+    /// ```
+    /// use crate::Organization;
+    ///
+    /// let org = Organization::new("Acme Corp".to_string(), "contact@acmecorp.com".to_string());
+    /// println!("Organization created: {} with email {}", org.name, org.sender_email);
+    /// ```
     pub fn new(name: String, sender_email: String) -> Organization {
         Organization { name, sender_email }
     }
