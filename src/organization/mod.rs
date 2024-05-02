@@ -12,6 +12,7 @@
 //!
 
 use crate::EndpointConfigStripe;
+use crate::EmailConfig;
 use crate::Organization;
 
 pub mod model;
@@ -40,14 +41,14 @@ impl Organization {
     /// println!("Organization created: {} with email {}", org.name, org.sender_email);
     /// ```
     pub fn new(
-        name: String, 
-        sender_email: String
+        name: String,
+        email_config: EmailConfig
     ) -> Organization {
 
         // return the new instance of Organization
         Organization { 
             name, 
-            sender_email 
+            email_config
         }
     }
 

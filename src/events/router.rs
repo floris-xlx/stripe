@@ -1,18 +1,28 @@
 use crate::events::EventHandler;
 use crate::CustomerId;
 use crate::utils::format::format_total_amount;
+use crate::Organization;
+use crate::email::resend;
+use crate::email::EmailConfig;
+use crate::email::resend::send_email_html;
 
 
 use serde_json::Value;
 use supabase_rs::SupabaseClient;
 use std::env::var;
 use dotenv::dotenv;
-use std::thread::sleep;
-use std::time::Duration;
+use resend_email_rs::ResendClient;
+
+use tokio::time::sleep;
+use tokio::time::Duration;
+use tokio::spawn;
 
 
 impl EventHandler {
-    pub async fn new(json_data: &Value) -> Self {
+    pub async fn new(
+        json_data: &Value,
+        organization: Organization
+    ) -> Self {
         dotenv().ok();
     
         let event_type: &str = json_data.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
@@ -154,14 +164,71 @@ impl EventHandler {
                     .to_string();
 
                 CustomerId::cache_payment_link(
-                    email,
-                    payment_link, 
+                    email.clone(),
+                    payment_link.clone(), 
                     supabase.clone()
                 ).await.unwrap();
                 
-                
+                let email_ghost: String = email.clone();
+                let supabase_ghost: SupabaseClient = supabase.clone();
+             
 
+                // spawn a new thread to attach the payment link to the customer as background task
+                spawn(async move {
+                    println!("Scheduling a background task in 5 seconds before attaching payment link to customer");
+                    sleep(Duration::from_secs(5)).await;
+                    println!("Attaching payment link to customer");
+
+                    let _ = CustomerId::attach_payment_link(
+                        email_ghost.clone(),
+                        payment_link.clone(),
+                        supabase_ghost.clone()
+                    ).await;
+
+                });
+                println!("Payment link attached to customer");
                 
+                sleep(Duration::from_secs(6)).await;
+                // authenticate resend with an env var
+                let resend_client: ResendClient = resend::authenticate(var("RESEND_API_KEY").unwrap());
+
+                let recipient_email: Vec<String> = vec![email.clone()];
+                let subject: String = organization.email_config.subject.to_string();
+                let html: String = format!(
+                    "<html><body><p>Hi there, <br> Your payment link is ready, click <a href=''>here</a> to pay</p></body></html>",                    
+                );
+
+                let email_sent_status: Result<String, String> = send_email_html(
+                    resend_client,
+                    organization,
+                    recipient_email,
+                    subject,
+                    html,
+                    None
+                ).await;
+
+                println!("Email sent status: {:?}", email_sent_status);
+
+
+                if email_sent_status.is_ok() {
+
+                    println!("Email sent successfully");
+                    CustomerId::update_email_sent_status_by_email(
+                        email.clone(),
+                        true,
+                        supabase.clone()
+                    ).await.unwrap();
+                } else {
+
+                    println!("Email failed to send");
+                    CustomerId::update_email_sent_status_by_email(
+                        email.clone(),
+                        false,
+                        supabase.clone()
+                    ).await.unwrap();
+                }
+        
+
                 EventHandler::CheckoutSessionCompleted 
             },
             _ => EventHandler::Unknown,

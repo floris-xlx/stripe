@@ -12,8 +12,7 @@
 
 use stripe_discord::email::resend::authenticate;
 use stripe_discord::email::resend::send_email_html;
-use stripe_discord::Organization;
-use stripe_discord::CustomerId;
+
 
 use rocket::http::Status;
 use rocket::Rocket;
@@ -41,32 +40,6 @@ use std::env::var;
 use std::env;
 
 
-#[tokio::main(flavor = "multi_thread")]
-async fn cooking() {
-    println!("Hello, world!");
-
-
-    use dotenv::dotenv;
-    dotenv().ok();
-
-    let supabase_client: SupabaseClient = SupabaseClient::new(
-        var("SUPABASE_URL").expect("SUPABASE_URL must be set"),
-        var("SUPABASE_KEY").expect("SUPABASE_KEY must be set"),
-    );
-
-    // Assuming `stripe_discord::CustomerId` takes a string and CustomerId::new returns a Future which resolves to a String
-
-    let email: String = "floris@xylex.ai".to_string();
-
-    println!("Email: {:?}", email);
-
-
-
-
-
-
-}
-
 
 #[launch]
 pub async fn rocket() -> Rocket<Build> {
@@ -92,23 +65,42 @@ pub async fn rocket() -> Rocket<Build> {
 }
 
 
+
 use stripe_discord::events::EventHandler;
+use stripe_discord::Organization;
+use stripe_discord::EmailConfig;
 
 
 #[post("/stripe_webhooks", format = "json", data = "<webhook_data>")]
 pub async fn stripe_webhook(
     webhook_data: Json<Value>,
 ) -> status::Custom<String> {
-    println!("Stripe Webhook received!");
     println!("JSON Payload: {:#?}", webhook_data);
 
 
-    let event_handler: EventHandler = EventHandler::new(&webhook_data).await;
+    // build the email config
+    let email_config: EmailConfig = EmailConfig::new(
+        "billing@xylex.cloud".to_string(),
+        "Welcome to Xylex Enterprise!".to_string(),
+        "xxxx".to_string(),
+    );
+
+    // build the organization
+    let organization: Organization = Organization::new(
+        "Xylex".to_string(),
+        email_config
+    );
+    // build the event handler
+    let event_handler: EventHandler = EventHandler::new(
+        &webhook_data,
+        organization
+    ).await;
+
+
+
 
 
     println!("\x1b[32mEvent Handler: {:#?}\x1b[0m", event_handler);
-
-
     status::Custom(
         Status::Ok,
         "Received webhook".to_string()

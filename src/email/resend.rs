@@ -14,6 +14,7 @@
 //!
 
 use crate::Organization;
+use crate::EmailConfig;
 use resend_email_rs::{Attachment, MailHtml, ResendClient};
 
 /// ## authenticate
@@ -96,7 +97,8 @@ pub async fn send_email_html(
     html: String,
     attachments: Option<Vec<Attachment>>,
 ) -> Result<String, String> {
-    let from: String = organization.sender_email;
+    // Extract the sender email from the organization configuration
+    let from: String = organization.email_config.sender_email.to_string();
 
     let mail: MailHtml = MailHtml {
         from,

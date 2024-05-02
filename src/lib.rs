@@ -289,6 +289,29 @@ pub struct EndpointConfigStripe {
 }
 
 
+pub struct EmailConfig {
+    pub sender_email: String,
+    pub subject: String,
+    pub template_url: String
+}
+
+impl EmailConfig {
+    /// # new EmailConfig
+    pub fn new(
+        sender_email: String,
+        subject: String,
+        template_url: String
+    )-> Self {
+
+        Self {
+            sender_email,
+            subject,
+            template_url
+        }
+    }
+}
+
+
 /// ## Organization struct
 /// This struct represents the organization data that is used to create a new organization
 /// profile
@@ -303,8 +326,7 @@ pub struct EndpointConfigStripe {
 pub struct Organization {
     /// `The name of the organization that is used to identify the organization in the db`
     pub name: String,
-    /// `We need the [endpoint_route] to route to the correct endpoint and attach a probe to it, so we can be alerted when the endpoint is down`
-    pub sender_email: String,
+    pub email_config: EmailConfig,
 }
 
 
