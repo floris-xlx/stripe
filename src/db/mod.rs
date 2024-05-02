@@ -40,7 +40,7 @@ pub mod supabase;
 /// Returns a `SupabaseClient` object configured with the specified URL and key.
 /// If the environment variables are not set, the function will panic with an error message.
 ///
-/// ## Examples
+/// ## Example: Initializing a Supabase client
 /// ```
 /// let client = init_supabase_client();
 /// // Now `client` can be used to interact with Supabase services.

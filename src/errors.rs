@@ -24,7 +24,12 @@ impl Display for ConfigError {
     ///
     /// This function is used to format the error message
     ///
-    fn fmt(&self, f: &mut Formatter) -> Result {
+    fn fmt(
+        &self, 
+        f: &mut Formatter
+    ) -> Result {
+
+        // match the error variant
         match *self {
             ConfigError::FileNotFound(ref path) => write!(f, "File not found at path: {}", path),
             ConfigError::InvalidFileType(ref path) => write!(

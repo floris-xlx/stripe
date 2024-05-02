@@ -2,6 +2,7 @@
 //!
 use crate::email::Email;
 
+
 impl Email {
     /// # new
     /// Creates a new instance of the `Email` struct with specified details.
@@ -24,7 +25,14 @@ impl Email {
     ///     "Hello, how are you?".to_string(),
     /// );
     /// ```
-    pub fn new(to: String, from: String, subject: String, body: String) -> Self {
+    pub fn new(
+        to: String, 
+        from: String, 
+        subject: String, 
+        body: String
+    ) -> Self {
+
+        // return the new instance of Email
         Self {
             to,
             from,

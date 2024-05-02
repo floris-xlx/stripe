@@ -6,14 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.82"
 dotenv = "0.15.0"
 regex = "1.10.4"
 resend_email_rs = "0.1.0"
+rocket = { version = "0.5.0", features = ["secrets", "json"] }
 serde = "1.0.198"
 serde_derive = "1.0.198"
 serde_json = "1.0.116"
 serde_yaml = "0.9.3"
 sled = "0.34.7"
-supabase_rs = "0.2.3"
+supabase_rs = "0.2.5"
 thiserror = "1.0.59"
 tokio = { version =  "1.37.0", features = ["full", "macros", "rt-multi-thread"] }

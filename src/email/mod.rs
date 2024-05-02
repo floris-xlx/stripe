@@ -33,6 +33,7 @@ pub mod smtp;
 pub mod templates;
 pub mod utils;
 
+
 /// ## Email
 ///
 ///
@@ -45,6 +46,7 @@ pub struct Email {
     pub body: String,
 }
 
+
 /// ## Bare bone `EmailAddress` type
 ///
 /// ### Implementations
@@ -52,6 +54,7 @@ pub struct Email {
 pub struct EmailAddress {
     pub email: String,
 }
+
 
 /// ## Email implementations
 /// Formats and verifies email addresses
@@ -78,6 +81,7 @@ pub struct EmailAddress {
 ///
 impl Email {}
 
+
 /// ## Email Provider
 /// This is the email provider that will be used to send out emails
 ///
@@ -96,6 +100,7 @@ pub enum EmailProvider {
     Resend,
     Smtp,
 }
+
 
 // temp clippy patches FIXME
 #[allow(clippy::should_implement_trait)]
@@ -125,6 +130,7 @@ impl EmailProvider {
         }
     }
 
+
     /// ## To string
     /// This will convert the email provider into a string
     ///
@@ -145,7 +151,10 @@ impl EmailProvider {
             EmailProvider::Smtp => "smtp".to_string(),
         }
     }
+    
+
 }
+
 
 /// ## Email Configurations
 /// This is the configuration for the email client

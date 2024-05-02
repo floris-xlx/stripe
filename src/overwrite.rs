@@ -3,6 +3,7 @@
 use dotenv::dotenv;
 use std::env::var;
 
+
 /// ## Overwrite Stripe Customer Table Name
 ///
 /// This function will return the table name to use in Supabase for the Stripe Customer data
@@ -27,6 +28,7 @@ pub fn overwrite_stripe_customer_table_name() -> String {
 
     table_name
 }
+
 
 /// ## Overwrite Stripe Email Column Name
 ///
@@ -53,6 +55,7 @@ pub fn overwrite_stripe_email_column_name() -> String {
     column_name_email
 }
 
+
 /// ## Overwrite Stripe Customer ID Column Name
 ///
 /// This function will return the column name for the customer ID in Supabase for the Stripe Customer data
@@ -77,6 +80,7 @@ pub fn overwrite_stripe_customer_id_column_name() -> String {
 
     column_name_customer_id
 }
+
 
 /// ## Overwrite Stripe Customer Paid column name
 /// Type: Boolean
@@ -103,4 +107,126 @@ pub fn overwrite_stripe_customer_paid_column_name() -> String {
     };
 
     column_name_customer_paid
+}
+
+
+/// ## Overwrite `email_sent` column name for the Stripe Customer data
+///
+/// This function will return the column name for the email sent status in Supabase for the Stripe Customer data
+///
+/// ### Returns  
+/// The column name for the email sent status to use in Supabase for the Stripe Customer data  
+pub fn overwrite_stripe_customer_email_sent_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_email_sent: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_EMAIL_SENT_COLUMN_NAME") {
+            Ok(column_name_customer_email_sent) => column_name_customer_email_sent.clone(),
+            Err(_) => "email_sent".to_string(),
+        };
+
+    column_name_customer_email_sent
+}
+
+
+/// ### Overwrite `end_time` column name for the Stripe Customer data`
+///
+/// This function will return the column name for the end time in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the end time to use in Supabase for the Stripe Customer data
+///
+/// ### Examples
+/// ```rust
+/// use stripe_discord::overwrite::overwrite_stripe_customer_end_time_column_name;
+///
+/// let column_name_customer_end_time = overwrite_stripe_customer_end_time_column_name();
+/// ```
+///
+pub fn overwrite_stripe_customer_end_time_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_end_time: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_END_TIME_COLUMN_NAME") {
+            Ok(column_name_customer_end_time) => column_name_customer_end_time.clone(),
+            Err(_) => "end_time".to_string(),
+        };
+
+    column_name_customer_end_time
+}
+
+
+/// ### Overwrite `name` column name for the Stripe Customer data
+///
+/// This function will return the column name for the name in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the name to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_name_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_name: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_NAME_COLUMN_NAME") {
+            Ok(column_name_customer_name) => column_name_customer_name.clone(),
+            Err(_) => "name".to_string(),
+        };
+
+    column_name_customer_name
+}
+
+/// ### Overwrite `start_time` column name for the Stripe Customer data
+///
+/// This function will return the column name for the start time in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the start time to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_start_time_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_start_time: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_START_TIME_COLUMN_NAME") {
+            Ok(column_name_customer_start_time) => column_name_customer_start_time.clone(),
+            Err(_) => "start_time".to_string(),
+        };
+
+    column_name_customer_start_time
+}
+
+
+
+/// ### Overwrite `receipt_url` column name for the Stripe Customer data
+///
+/// This function will return the column name for the receipt URL in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the receipt URL to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_receipt_url_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_receipt_url: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_RECEIPT_URL_COLUMN_NAME") {
+            Ok(column_name_customer_receipt_url) => column_name_customer_receipt_url.clone(),
+            Err(_) => "receipt_url".to_string(),
+        };
+
+    column_name_customer_receipt_url
+}
+
+
+/// ### Overwrite `country` column name for the Stripe Customer data
+///
+/// This function will return the column name for the country in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the country to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_country_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_country: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_COUNTRY_COLUMN_NAME") {
+            Ok(column_name_customer_country) => column_name_customer_country.clone(),
+            Err(_) => "country".to_string(),
+        };
+
+    column_name_customer_country
 }

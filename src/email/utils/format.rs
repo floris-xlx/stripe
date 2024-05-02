@@ -36,7 +36,7 @@ impl EmailAddress {
     /// ## Returns
     /// Returns `true` if the email matches the regular expression, otherwise returns `false`.
     ///
-    /// ## Examples
+    /// ## Example: Verifying an email address
     /// ```rust
     /// let email = EmailAddress { email: "example@example.com".to_string() };
     /// assert!(email.verify_email());
@@ -57,7 +57,7 @@ impl EmailAddress {
     /// ## Returns
     /// Returns a `String` that contains the email address.
     ///
-    /// ## Examples
+    /// ## Example: Converting an `EmailAddress` instance to a `String`
     /// ```rust
     /// let email_address = EmailAddress { email: "example@example.com".to_string() };
     /// assert_eq!(email_address.to_string(), "example@example.com");

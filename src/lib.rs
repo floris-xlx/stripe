@@ -164,6 +164,7 @@ pub mod utils;
 
 use crate::email::EmailAddress;
 
+
 /// ## Configuration #[derive(Debug)]
 /// This will set the config for the `email` and for the `databasing` solutions
 /// NOTE: THIS WILL BE USED TO EITHER REPLACE THE .YAML OR GENERATE ONE !!
@@ -177,6 +178,7 @@ pub struct ConfigSetup {
     pub supabase_url: String,
     pub supabase_key: String,
 }
+
 
 /// # ConfigError
 ///
@@ -204,6 +206,7 @@ pub enum ConfigError {
     FileNotFound(String),
     InvalidFileType(String),
 }
+
 
 /// ## EndpointConfigStripe for `rocket`
 /// This is your entry endpoint configuration that you will attach to your `endpoint_stripe` to
@@ -284,6 +287,7 @@ pub struct EndpointConfigStripe {
     pub replace_keys_with_env_names: bool,
 }
 
+
 /// ## Organization struct
 /// This struct represents the organization data that is used to create a new organization
 /// profile
@@ -302,6 +306,7 @@ pub struct Organization {
     pub sender_email: String,
 }
 
+
 /// ## Customer ID for Stripe
 /// This struct represents the customer ID for Stripe
 ///
@@ -315,8 +320,11 @@ pub struct Organization {
 ///
 #[derive(Debug, Clone)]
 pub struct CustomerId {
+    /// The customer id
     pub id: String,
 }
+
+
 
 impl CustomerId {
     /// # as_str
@@ -328,7 +336,7 @@ impl CustomerId {
     /// ## Returns
     /// A string slice (`&str`) representing the `id` of the customer.
     ///
-    /// ## Examples
+    /// ## Example: Getting the customer id as a string slice
     /// ```rust
     /// use stripe_discord::CustomerId;
     ///
@@ -336,6 +344,9 @@ impl CustomerId {
     /// assert_eq!(customer_id.as_str(), "cus_12345");
     /// ```
     pub fn as_str(&self) -> &str {
+
+        // return the id as a string slice
         self.id.as_str()
     }
+
 }

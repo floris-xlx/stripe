@@ -17,6 +17,7 @@ use crate::Organization;
 pub mod model;
 pub mod router;
 
+
 /// ## Organization implementation `new`
 /// This is the implementation of the `Organization` struct
 ///
@@ -38,7 +39,16 @@ impl Organization {
     /// let org = Organization::new("Acme Corp".to_string(), "contact@acmecorp.com".to_string());
     /// println!("Organization created: {} with email {}", org.name, org.sender_email);
     /// ```
-    pub fn new(name: String, sender_email: String) -> Organization {
-        Organization { name, sender_email }
+    pub fn new(
+        name: String, 
+        sender_email: String
+    ) -> Organization {
+
+        // return the new instance of Organization
+        Organization { 
+            name, 
+            sender_email 
+        }
     }
+
 }
