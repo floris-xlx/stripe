@@ -30,6 +30,29 @@ pub fn overwrite_stripe_customer_table_name() -> String {
 }
 
 
+
+/// ### Overwrite `stripe_plink_cache` table name for the Stripe Customer data
+///
+/// This function will return the table name for the `stripe_plink_cache` in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The table name for the `stripe_plink_cache` to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_plink_cache_table_name() -> String {
+    dotenv().ok();
+
+    let table_name: String = match var("OVERWRITE_STRIPE_PLINK_CACHE_TABLE_NAME") {
+        Ok(table_name) => table_name.clone(),
+        Err(_) => "stripe_plink_cache".to_string(),
+    };
+
+    table_name
+}
+
+
+
+
+
+
 /// ## Overwrite Stripe Email Column Name
 ///
 /// This function will return the column name for the email in Supabase for the Stripe Customer data
@@ -229,4 +252,42 @@ pub fn overwrite_stripe_customer_country_column_name() -> String {
         };
 
     column_name_customer_country
+}
+
+
+/// ### Overwrite `amount_total` column name for the Stripe Customer data
+///
+/// This function will return the column name for the amount total in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the amount total to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_amount_total_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_amount_total: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_AMOUNT_TOTAL_COLUMN_NAME") {
+            Ok(column_name_customer_amount_total) => column_name_customer_amount_total.clone(),
+            Err(_) => "amount_total".to_string(),
+        };
+
+    column_name_customer_amount_total
+}
+
+
+/// ### Overwrite `payment_link` column name for the Stripe Customer data
+///
+/// This function will return the column name for the payment link in Supabase for the Stripe Customer data
+///
+/// ### Returns
+/// The column name for the payment link to use in Supabase for the Stripe Customer data
+pub fn overwrite_stripe_customer_payment_link_column_name() -> String {
+    dotenv().ok();
+
+    let column_name_customer_payment_link: String =
+        match var("OVERWRITE_STRIPE_CUSTOMER_PAYMENT_LINK_COLUMN_NAME") {
+            Ok(column_name_customer_payment_link) => column_name_customer_payment_link.clone(),
+            Err(_) => "payment_link".to_string(),
+        };
+
+    column_name_customer_payment_link
 }

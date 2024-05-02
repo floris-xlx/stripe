@@ -161,6 +161,7 @@ pub mod organization;
 pub mod overwrite;
 pub mod tests;
 pub mod utils;
+pub mod background;
 
 use crate::email::EmailAddress;
 

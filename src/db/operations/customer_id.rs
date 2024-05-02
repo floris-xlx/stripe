@@ -21,7 +21,10 @@ use crate::overwrite::{
     overwrite_stripe_customer_end_time_column_name,
     overwrite_stripe_customer_name_column_name, 
     overwrite_stripe_customer_receipt_url_column_name,
-    overwrite_stripe_customer_country_column_name
+    overwrite_stripe_customer_country_column_name,
+    overwrite_stripe_customer_amount_total_column_name,
+    overwrite_stripe_customer_payment_link_column_name,
+    overwrite_stripe_plink_cache_table_name
 };
 
 use serde_json::json;
@@ -80,6 +83,58 @@ impl CustomerId {
         }
 
         Ok(customer_id)
+    }
+
+
+    /// # create a new `CustomerId` object in the Supabase database
+    /// This function creates a new `CustomerId` object in the Supabase database using only the email.
+    ///
+    /// ## Arguments
+    /// - `email`: `String` - The email to be associated with the new `CustomerId` object
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database
+    /// 
+    /// ## Returns
+    /// - `Result<CustomerId, Box<dyn Error>>`: This function returns a `Result` which is either:
+    ///   - `Ok(CustomerId)`: The newly created `CustomerId` object
+    ///   - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    /// 
+    /// ## Example: Creating a new `CustomerId` object using only the email
+    /// ```rust
+    /// let email = "floris@xylex.ai";
+    /// let supabase = SupabaseClient::new("SUPABASE_URL", "SUPABASE_KEY");
+    /// let customer_id = CustomerId::new(email.to_string(), supabase).await.unwrap();
+    /// ```
+    pub async fn new_from_email(
+        email: String,
+        create_record: bool,
+        supabase: SupabaseClient,
+    ) -> Result<String, Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_customer_table_name();
+        let column_name_email: String = overwrite_stripe_email_column_name();
+
+        if create_record {
+            let existing_record = supabase
+                .select(&table_name)
+                .eq(&column_name_email, &email.as_str())
+                .execute()
+                .await
+                .unwrap();
+
+            if !existing_record.is_empty() {
+                return Ok(email);
+            }
+
+            let result_customer_id: String = supabase
+                .insert(
+                    &table_name,
+                    json!({
+                        column_name_email: email
+                    }),
+                )
+                .await?;
+        }
+
+        Ok(email)
     }
 
 
@@ -784,7 +839,6 @@ impl CustomerId {
     /// - `Ok(())`: If the country is successfully updated.
     /// 
     /// - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
-
     pub async fn update_country(
         customer_id: CustomerId,
         new_country: String,
@@ -835,7 +889,6 @@ impl CustomerId {
     /// - `Ok(String)`: The country of the customer if found.
     /// 
     /// - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
-
     pub async fn get_country(
         customer_id: CustomerId,
         supabase: SupabaseClient,
@@ -861,5 +914,185 @@ impl CustomerId {
             .to_string();
 
         Ok(country)
+    }
+
+    /// ## `update_amount_total`
+    /// Updates the `amount_total` associated with a given `CustomerId` in the Supabase database.
+    /// 
+    /// ### Arguments
+    /// - `customer_id`: `CustomerId` - The unique identifier for the customer whose `amount_total` is being updated.
+    /// - `new_amount_total`: `f64` - The new `amount_total` to be updated for the customer.
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database.
+    /// 
+    /// ### Returns
+    /// - `Result<(), Box<dyn Error>>`: This function returns a `Result` which is either:
+    ///   - `Ok(())`: If the `amount_total` is successfully updated.
+    ///   - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    pub async fn update_amount_total(
+        customer_id: CustomerId,
+        new_amount_total: f64,
+        supabase: SupabaseClient,
+    ) -> Result<(), Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_customer_table_name();
+        let column_name_customer_id: String = overwrite_stripe_customer_id_column_name();
+        let column_name_amount_total: String = overwrite_stripe_customer_amount_total_column_name();
+        let column_name_email: String = overwrite_stripe_email_column_name();
+
+        // fetch email over the self
+        let email: String = CustomerId::get_email(customer_id.clone(), supabase.clone())
+            .await
+            .unwrap();
+
+        let row_id = SupabaseClient::get_id(
+            supabase.clone(),
+            email,
+            table_name.clone(),
+            column_name_email,
+        );
+
+
+        let row_id: String = row_id.await.unwrap();
+
+        let result_update_amount_total: String = supabase
+            .upsert(
+                &table_name,
+                &row_id,
+                json!({
+                    column_name_amount_total: new_amount_total
+                }),
+            )
+            .await
+            .unwrap();
+
+        Ok(())
+
+    }
+
+    /// ## `get_amount_total`
+    /// Retrieves the `amount_total` associated with a given `CustomerId` from the Supabase database.
+    /// 
+    /// ### Arguments
+    /// - `customer_id`: `CustomerId` - The unique identifier for the customer whose `amount_total` is being retrieved.
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database.
+    /// 
+    /// ### Returns
+    /// - `Result<f64, Box<dyn Error>>`: This function returns a `Result` which is either:
+    ///   - `Ok(f64)`: The `amount_total` of the customer if found.
+    ///   - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    pub async fn get_amount_total(
+        customer_id: CustomerId,
+        supabase: SupabaseClient,
+    ) -> Result<f64, Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_customer_table_name();
+        let column_name_customer_id: String = overwrite_stripe_customer_id_column_name();
+        let column_name_amount_total: String = overwrite_stripe_customer_amount_total_column_name();
+
+        let result_get_amount_total: Vec<Value> = supabase
+            .select(&table_name)
+            .eq(&column_name_customer_id, customer_id.as_str())
+            .execute()
+            .await
+            .unwrap();
+
+        let customer_data_from_result: &Value = result_get_amount_total
+            .first()
+            .expect("Failed extracting amount_total from Supabase response for `get_amount_total`");
+
+        let amount_total: f64 = customer_data_from_result[column_name_amount_total]
+            .as_f64()
+            .unwrap();
+
+        Ok(amount_total)
+    }
+
+
+    /// # update `payment_link` column by `CustomerId`
+    /// Type: String
+    ///
+    /// ### Arguments
+    /// - `customer_id`: `CustomerId` - The unique identifier for the customer whose payment link is being updated.
+    /// - `payment_link`: `String` - The new payment link to be set for the customer.
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database.
+    /// 
+    /// ### Returns
+    /// - `Result<String, Box<dyn Error>>`: This function returns a `Result` which is either:
+    /// - `Ok(String)`: The result of the update operation.
+    /// - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    /// 
+    /// ### Example: Updating the payment link associated with a `CustomerId`
+    /// ```rust
+    /// let customer_id = CustomerId::new("some_unique_id");
+    /// let supabase_client = SupabaseClient::new("your_supabase_url", "your_supabase_key");
+    /// let result = update_payment_link(customer_id, "new_payment_link", supabase_client).await?;
+    /// assert_eq!(result, "success");
+    /// ```
+    pub async fn cache_payment_link(
+        email: String,
+        payment_link: String,
+        supabase: SupabaseClient,
+    ) -> Result<String, Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_plink_cache_table_name();
+        let column_name_payment_link: String = overwrite_stripe_customer_payment_link_column_name();
+        let column_name_email: String = overwrite_stripe_email_column_name();
+
+        let result_update_payment_link: String = supabase
+            .insert(
+                &table_name,
+                json!({
+                    column_name_email: email,
+                    column_name_payment_link: payment_link
+                }),
+            )
+            .await
+            .unwrap();
+
+        Ok(result_update_payment_link)
+    }
+
+
+    /// # get_payment_link
+    /// Retrieves the `payment_link` associated with a given `CustomerId` from the Supabase database.
+    ///
+    /// ## Arguments
+    /// - `email`: `String` - The email of the customer whose payment link is being retrieved.
+    /// - `supabase`: `SupabaseClient` - The client used to interact with the Supabase database.
+    /// 
+    /// ## Returns
+    /// - `Result<String, Box<dyn Error>>`: This function returns a `Result` which is either:
+    /// - `Ok(String)`: The payment link of the customer if found.
+    /// - `Err(Box<dyn Error>)`: An error boxed in a trait object if an issue occurs during the database operation.
+    /// 
+    /// ## Example: Retrieving the payment link associated with a `CustomerId`
+    /// ```rust
+    /// let customer_id = CustomerId::new("some_unique_id");
+    /// let supabase_client = SupabaseClient::new("your_supabase_url", "your_supabase_key");
+    /// let payment_link = get_payment_link(customer_id, supabase_client).await?;
+    /// assert_eq!(payment_link, "some_payment_link");
+    /// ```
+    pub async fn decache_payment_link(
+        email: String,
+        supabase: SupabaseClient,
+    ) -> Result<String, Box<dyn Error>> {
+        let table_name: String = overwrite_stripe_plink_cache_table_name();
+        let column_name_payment_link: String = overwrite_stripe_customer_payment_link_column_name();
+        let column_name_email: String = overwrite_stripe_email_column_name();
+
+        let result_get_payment_link: Vec<Value> = supabase
+            .select(&table_name)
+            .eq(&column_name_email, email.as_str())
+            .execute()
+            .await
+            .unwrap();
+
+        let customer_data_from_result: &Value = result_get_payment_link
+            .first()
+            .expect("Failed extracting payment link from Supabase response for `get_payment_link`");
+
+        let payment_link: String = customer_data_from_result[column_name_payment_link]
+            .as_str()
+            .unwrap()
+            .to_string();
+
+        Ok(payment_link)
     }
 }

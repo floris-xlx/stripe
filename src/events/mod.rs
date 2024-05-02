@@ -34,13 +34,15 @@ pub enum EventHandler {
 }
 
 
+#[derive(Debug, Clone)]
 pub struct CheckoutSessionCompleted {
     pub email: String,
     pub name: String,
     pub amount: i64,
     pub paid_status: bool,
     pub created_at: i64,
-    pub country: String,
+    pub country: String,    
+    pub payment_link: String
 }
 
 
@@ -121,6 +123,7 @@ pub struct ChargeSucceeded {
 ///
 /// ### Fields
 /// - `paid_status` - The paid status of the user
+/// 
 #[derive(Debug, Clone)]
 pub struct ChargeFailed {
     pub paid_status: bool,
