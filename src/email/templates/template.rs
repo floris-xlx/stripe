@@ -8,18 +8,22 @@ use crate::EmailConfig;
 use reqwest::Client;
 
 impl EmailConfig {
+    /// # download_email_template
     pub async fn download_email_template(
         &self,
     ) -> Result<String, reqwest::Error> {
-        let client = Client::new();
-        let email_template_url = self.template_url.clone();
-        let res: String = client.get(email_template_url)
+        let client: Client = Client::new();
+        let email_template_url: String = self.template_url.clone();
+
+        let response: String = client.get(email_template_url)
             .send()
             .await?
             .text()
             .await?;
 
-        Ok(res)
+        println!("Email template downloaded: {}", response);
+
+        Ok(response)
     }
 
 }

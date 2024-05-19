@@ -82,8 +82,9 @@ pub async fn stripe_webhook(
     let email_config: EmailConfig = EmailConfig::new(
         "billing@xylex.cloud".to_string(),
         "Welcome to Xylex Enterprise!".to_string(),
-        "xxxx".to_string(),
+        "https://xylex.ams3.cdn.digitaloceanspaces.com/email_templates/diamant_ai_new_sub.html".to_string(),
     );
+
 
     // build the organization
     let organization: Organization = Organization::new(

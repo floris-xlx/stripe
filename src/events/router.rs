@@ -194,8 +194,15 @@ impl EventHandler {
 
                 let recipient_email: Vec<String> = vec![email.clone()];
                 let subject: String = organization.email_config.subject.to_string();
+
+
+                // get the email template
+                let email_template: String = organization.email_config.download_email_template().await.unwrap();
+
+                // format the email template
                 let html: String = format!(
-                    "<html><body><p>Hi there, <br> Your payment link is ready, click <a href=''>here</a> to pay</p></body></html>",                    
+                    "{}",
+                    email_template                   
                 );
 
                 let email_sent_status: Result<String, String> = send_email_html(
@@ -228,7 +235,6 @@ impl EventHandler {
                     ).await.unwrap();
                 }
         
-
                 EventHandler::CheckoutSessionCompleted 
             },
             _ => EventHandler::Unknown,

@@ -297,6 +297,15 @@ pub struct EmailConfig {
 
 impl EmailConfig {
     /// # new EmailConfig
+    /// This function creates a new `EmailConfig` struct from the provided email, subject, and template url
+    /// 
+    /// ## Arguments
+    /// - `sender_email` - The email address of the sender
+    /// - `subject` - The subject of the email
+    /// - `template_url` - The URL of the email template
+    /// 
+    /// ## Returns
+    /// A new `EmailConfig` struct
     pub fn new(
         sender_email: String,
         subject: String,
